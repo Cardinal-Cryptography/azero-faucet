@@ -1,7 +1,7 @@
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import express from 'express';
-import type { BalanceResponse, BotRequestType, DripResponse } from 'src/types';
+import type { BalanceResponse, BotRequestType, PageRequestType, DripResponse } from 'src/types';
 
 import { checkEnvVariables, getEnvVariable, logger } from '../utils';
 import Actions from './actions';
@@ -49,6 +49,32 @@ const createAndApplyActions = (): void => {
     ;
   }
   );
+
+  app.post<unknown, DripResponse, PageRequestType>('/page-endpoint', (req, res) => {
+    const { address, amount } = req.body;
+
+    storage.isValid(address, address).then(async (isAllowed) => {
+      if (!isAllowed) {
+        res.send({ limitReached: true });
+      } else {
+        const hash = await actions.sendTokens(address, amount);
+
+        // hash is null if something wrong happened
+        if (hash) {
+          storage.saveData(address, address)
+            .catch((e) => {
+              logger.error(e);
+              errorCounter.plusOne('other');
+            });
+        }
+
+        res.send({ hash });
+      }
+    }).catch((e) => {
+      logger.error(e);
+      errorCounter.plusOne('other');
+    });
+  });
 
   app.post<unknown, DripResponse, BotRequestType>('/bot-endpoint', (req, res) => {
     const { address, amount, sender } = req.body;

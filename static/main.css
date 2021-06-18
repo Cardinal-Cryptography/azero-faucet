@@ -1,0 +1,28 @@
+body {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	width: 780px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+section {
+	text-align: justify;
+}
+
+header {
+	clear: both;
+	width: 100%;
+	margin-top: 40px;
+}
+
+h1 {
+	text-align: center;
+	font-size: 2.7em;
+	margin-top: 0em;
+}
+
+form {
+	text-align: center;
+}
