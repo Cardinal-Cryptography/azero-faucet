@@ -7,6 +7,7 @@
     "build": "tsc",
     "backend": "yarn build && node ./build/server/index.js",
     "bot": "yarn build && node ./build/bot/index.js",
+    "page": "yarn build && node ./build/page/index.js",
     "lint": "yarn build && npx eslint ./src/ --ext .js,.ts",
     "lint:fix": "yarn build && npx eslint ./src/ --ext .js,.ts --fix",
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -22,6 +22,13 @@ export type EnvNameBot = 'BACKEND_URL'|
  'NETWORK_UNIT'
 ;
 
+export type EnvNamePage = 'BACKEND_URL'|
+ 'DRIP_AMOUNT' |
+ 'PAGE_PORT' |
+ 'COOLDOWN' |
+ 'NETWORK_UNIT'
+;
+
 export interface EnvOpt {
   default?: PrimitivType;
   required: boolean;
@@ -44,4 +51,9 @@ export interface BotRequestType {
   sender: string;
 }
 
-export type EnvVar<T extends EnvNameServer | EnvNameBot> = Record<T, EnvOpt>;
+export interface PageRequestType {
+  address: string;
+  amount: string;
+}
+
+export type EnvVar<T extends EnvNameServer | EnvNameBot | EnvNamePage> = Record<T, EnvOpt>;
