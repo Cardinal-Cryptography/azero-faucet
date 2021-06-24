@@ -8,6 +8,7 @@ import { isDripSuccessResponse } from '../guards';
 import type {
   BalanceResponse,
   BotRequestType,
+  PageRequestType,
   DripResponse,
   MetricsDefinition,
 } from '../types';
@@ -127,6 +128,32 @@ const createAndApplyActions = (): void => {
         logger.error(e);
         errorCounter.plusOne('other');
       });
+  });
+
+  app.post<unknown, DripResponse, PageRequestType>('/page-endpoint', (req, res) => {
+    const { address, amount } = req.body;
+
+    storage.isValid(address, address).then(async (isAllowed) => {
+      if (!isAllowed) {
+        res.send({ limitReached: true });
+      } else {
+        const hash = await actions.sendTokens(address, amount);
+
+        // hash is null if something wrong happened
+        if (hash) {
+          storage.saveData(address, address)
+            .catch((e) => {
+              logger.error(e);
+              errorCounter.plusOne('other');
+            });
+        }
+
+        res.send({ hash });
+      }
+    }).catch((e) => {
+      logger.error(e);
+      errorCounter.plusOne('other');
+    });
   });
 
   app.post<unknown, DripResponse, BotRequestType>(

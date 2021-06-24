@@ -8,6 +8,7 @@
     "backend": "yarn build && node ./build/src/server/index.js",
     "dev:backend": "nodemon -- ./src/server/index.ts",
     "bot": "yarn build && node ./build/src/bot/index.js",
+    "page": "yarn build && node ./build/page/index.js",
     "dev:bot": "nodemon -- ./src/bot/index.ts",
     "typing": "tsc --noEmit",
     "lint": "eslint ./src/ --ext .js,.ts",
