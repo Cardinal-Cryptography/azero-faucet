@@ -37,10 +37,8 @@ $(() => {
       success: (response) => {
         button.removeAttr('disabled');
 
-        console.log('success', response);
-
         message
-          // .html()
+          .html(response)
           .addClass('is-success')
           .slideDown();
 
@@ -51,13 +49,11 @@ $(() => {
         form.find('input[type="text"]:not(.h-form), input[type="email"], input[type="tel"], input[type="url"]').val('');
         form.find('input[type="checkbox"]').prop('checked', false);
       },
-      error: (error) => {
+      error: (error, ajaxOptions, thrownError) => {
         button.removeAttr('disabled');
 
-        console.log(error, error.getMessage());
-
         message
-          // .html()
+          .html(error.responseText ? error.responseText : thrownError)
           .addClass('is-error')
           .slideDown();
       },
