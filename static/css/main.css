@@ -256,29 +256,9 @@ form .form-group.has-error input:not([type=checkbox]) {
   border-color: #f30;
 }
 
-form .form-errors {
+form .form-error {
   display: none;
   margin: 30px 0 0;
-  padding: 0;
-  text-align: left;
-}
-
-form .form-errors.is-error,
-form .form-errors.is-success {
-  display: block;
-}
-
-form .form-errors.is-error {
-  background-color: red;
-}
-
-form .form-errors.is-success {
-  background-color: green;
-}
-
-form .form-errors p {
-  display: block;
-  margin: 0;
   padding: 5px 10px;
   color: #fff;
   font-family: "Karla", sans-serif;
@@ -286,4 +266,55 @@ form .form-errors p {
   font-weight: 400;
   line-height: 1.2;
   text-align: center;
+}
+
+form .form-error.is-error,
+form .form-error.is-success {
+  display: block;
+}
+
+form .form-error.is-error {
+  background-color: red;
+}
+
+form .form-error.is-success {
+  background-color: green;
+}
+
+input.parsley-success,
+select.parsley-success,
+textarea.parsley-success {
+  color: #468847;
+  background-color: #DFF0D8;
+  border: 1px solid #D6E9C6;
+}
+
+input.parsley-error,
+select.parsley-error,
+textarea.parsley-error {
+  color: #B94A48;
+  background-color: #F2DEDE;
+  border: 1px solid #EED3D7;
+}
+
+.parsley-errors-list {
+  margin: 5px 0 0;
+  padding: 0;
+  list-style-type: none;
+  opacity: 0;
+  color: red;
+  font-family: "Karla", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.2;
+  text-align: left;
+
+  transition: all .3s ease-in;
+  -o-transition: all .3s ease-in;
+  -moz-transition: all .3s ease-in;
+  -webkit-transition: all .3s ease-in;
+}
+
+.parsley-errors-list.filled {
+  opacity: 1;
 }
