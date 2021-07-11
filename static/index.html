@@ -43,23 +43,24 @@
 
           <img class="faucet" src="/images/faucet.svg" alt="Faucet">
 
-          <form action="/drip" method="POST">
+          <form action="/drip" method="POST" class="js-ajax-form">
             <div class="form-group">
               <label for="address">Aleph Zero test wallet address ($TZERO)</label>
-              <input type="text" name="address" id="address" placeholder="Aleph Zero test wallet address ($TZERO)">
+              <input type="text" name="address" id="address" placeholder="Aleph Zero test wallet address ($TZERO)" required>
             </div>
 
-            <button type="submit" class="button--submit">Make it rain!</button>
+            <button type="submit" class="button--submit | js-ajax-form-button">Make it rain!</button>
 
-            <div class="form-errors">
-              <p>TEST</p>
-            </div>
+            <div class="form-error | js-ajax-form-message |"></div>
           </form>
         </div>
       </div>
     </div>
   </section>
 
+  <script src="/js/jquery-3.6.0.min.js"></script>
+  <script src="/js/es5-sham.min.js"></script>
+  <script src="/js/parsley.min.js"></script>
   <script src="/js/main.js"></script>
 </body>
 </html>
