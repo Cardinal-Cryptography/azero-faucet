@@ -257,19 +257,33 @@ form .form-group.has-error input:not([type=checkbox]) {
 }
 
 form .form-errors {
-  display: block;
-  margin: 10px 0 0;
+  display: none;
+  margin: 30px 0 0;
   padding: 0;
   text-align: left;
+}
+
+form .form-errors.is-error,
+form .form-errors.is-success {
+  display: block;
+}
+
+form .form-errors.is-error {
+  background-color: red;
+}
+
+form .form-errors.is-success {
+  background-color: green;
 }
 
 form .form-errors p {
   display: block;
   margin: 0;
-  padding: 0;
-  color: #f30;
+  padding: 5px 10px;
+  color: #fff;
   font-family: "Karla", sans-serif;
   font-size: 12px;
   font-weight: 400;
   line-height: 1.2;
+  text-align: center;
 }
