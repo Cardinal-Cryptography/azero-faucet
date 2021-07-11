@@ -4,3 +4,5 @@ storage.db
 build
 public
 *.nosync
+.DS_Store
+.idea
