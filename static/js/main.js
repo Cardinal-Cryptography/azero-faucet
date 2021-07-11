@@ -40,7 +40,7 @@ $(() => {
         console.log('success', response);
 
         message
-          .html()
+          // .html()
           .addClass('is-success')
           .slideDown();
 
@@ -54,10 +54,10 @@ $(() => {
       error: (error) => {
         button.removeAttr('disabled');
 
-        console.log(error, error.response);
+        console.log(error, error.getMessage());
 
         message
-          .html()
+          // .html()
           .addClass('is-error')
           .slideDown();
       },
