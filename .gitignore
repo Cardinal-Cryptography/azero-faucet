@@ -2,3 +2,5 @@
 node_modules
 storage.db
 build
+public
+*.nosync
