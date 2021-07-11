@@ -252,7 +252,7 @@ form .form-group input:not([type=checkbox])[disabled] {
   opacity: 0.4;
 }
 
-form .form-group.has-error input:not([type=checkbox]) {
+form .form-group.parsley-error input:not([type=checkbox]) {
   border-color: #f30;
 }
 
