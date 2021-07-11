@@ -1,18 +1,60 @@
-<!doctype html>
-<html lang="en-gb">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<meta charset="utf-8">
+  <title>Aleph Faucet</title>
+  <meta name="description" content="Get free tokens for the Aleph Zero testnet.">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
-	<title>Aleph faucet</title>
-	<meta name="description" content="Get free tokens for the Aleph Zero testnet.">
-	<link rel="stylesheet" type="text/css" href="main.css" />
+  <!-- CSRF Token -->
+  <meta name="csrf-token" content="VC9cE5bPsDPWiMfL6P4hUfyhZd7DXEvL6nPelkTu">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/favicons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/favicons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/favicons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/favicons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/favicons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/favicons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/favicons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/favicons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+  <link rel="manifest" href="/favicons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/favicons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  <link rel="stylesheet" type="text/css" href="/main.css"/>
 </head>
 <body>
-	<h1> Faucet </h1>
-	<h2> Provide your address to obtain free tokens. </h2>
+  <header>
+    <img src="/images/logo.svg" alt="Aleph Zero">
+  </header>
 
-	<form action="drip" method="POST">
-		<input type="text" name="address">
-		<input type="submit" value="Get Aleph!">
-	</form>
+  <section>
+    <div class="container">
+      <div class="container--tabs">
+        <div>
+          <h1>Faucet</h1>
+
+          <img class="faucet" src="/images/faucet.svg" alt="Faucet">
+
+          <form action="drip" method="POST">
+            <div class="form-group">
+              <label for="address">Enter your address</label>
+              <input type="text" name="address" id="address" placeholder="Enter your address">
+            </div>
+            <button type="submit" class="button--submit">
+              <span>Sign Up</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
 </html>
