@@ -23,17 +23,12 @@ $(() => {
     message.slideUp().removeClass('is-success is-error');
     button.attr('disabled', 'disabled');
 
-    const data = new FormData(this);
-
     $.ajax({
       type: form.attr('method'),
-      enctype: 'multipart/form-data',
       url: form.attr('action'),
-      data: data,
+      dataType: 'json',
+      data: form.serialize(),
       processData: false,
-      contentType: false,
-      cache: false,
-      timeout: 600000,
       success: (response) => {
         button.removeAttr('disabled');
 
