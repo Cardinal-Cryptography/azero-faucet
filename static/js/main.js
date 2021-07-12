@@ -33,7 +33,7 @@ $(() => {
         button.removeAttr('disabled');
 
         message
-          .html(response)
+          .html(response.message)
           .addClass('is-success')
           .slideDown();
 
