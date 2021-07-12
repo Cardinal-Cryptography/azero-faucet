@@ -269,11 +269,6 @@ form .form-error {
   word-wrap: break-word;
 }
 
-form .form-error.is-error,
-form .form-error.is-success {
-  display: block;
-}
-
 form .form-error.is-error {
   background-color: red;
 }
