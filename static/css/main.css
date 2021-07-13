@@ -314,3 +314,91 @@ textarea.parsley-error {
 .parsley-errors-list.filled {
   opacity: 1;
 }
+
+footer {
+  display: block;
+  margin: 0;
+  padding: 30px 0;
+  text-align: center;
+}
+
+@media screen and (min-width: 992px) {
+  footer {
+    padding-top: 60px;
+  }
+}
+
+footer nav,
+footer nav ul,
+footer nav ul li {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+footer nav ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+footer nav ul li {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+footer nav ul li:not(:first-child) {
+  position: relative;
+  z-index: 1;
+  padding-left: 11px;
+}
+
+footer nav ul li:not(:first-child)::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 14px;
+  background: #9ea1a4;
+}
+
+@media screen and (min-width: 768px) {
+  footer nav ul li:not(:first-child)::before {
+    height: 16px;
+  }
+}
+
+footer nav ul li a {
+  display: block;
+  margin: 0;
+  padding: 0 0 4px;
+  background-image: -webkit-gradient(linear,left top,right top,from(#00ccab),to(#00ccab));
+  background-image: -webkit-linear-gradient(left,#00ccab,#00ccab);
+  background-image: -o-linear-gradient(left,#00ccab 0,#00ccab 100%);
+  background-image: linear-gradient(90deg,#00ccab,#00ccab);
+  background-repeat: no-repeat;
+  background-position: left 87%;
+  background-size: 0 1px;
+  color: #9ea1a4;
+  font-family: "Karla", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: .25px;
+  line-height: 1;
+  -webkit-transition: all .4s ease;
+  -o-transition: .4s all ease;
+  transition: all .4s ease;
+}
+
+@media screen and (min-width: 768px) {
+  footer nav ul li a {
+    font-size: 16px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  footer nav ul li a:hover {
+    background-size: 100% 1px;
+  }
+}
