@@ -3132,6 +3132,11 @@ readdirp@~3.6.0:
   dependencies:
     picomatch "^2.2.1"
 
+recaptcha-verify@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/recaptcha-verify/-/recaptcha-verify-0.1.1.tgz#0f091d2ef0ae62ff738ba002cfae9affe8d91fae"
+  integrity sha1-DwkdLvCuYv9zi6ACz66a/+jZH64=
+
 regenerator-runtime@^0.13.4:
   version "0.13.9"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.9.tgz#8925742a98ffd90814988d7566ad30ca3b263b52"
