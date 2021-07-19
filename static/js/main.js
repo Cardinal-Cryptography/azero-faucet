@@ -23,6 +23,20 @@ $(() => {
     message.slideUp().removeClass('is-success is-error');
     button.attr('disabled', 'disabled');
 
+    let captchaResponse = false;
+
+    fetch('//www.google.com/recaptcha/api/siteverify?secret=6LcToacbAAAAAIqI1IUAmanCNly2c7jHfej-q531&response=03AGdBq24qpi32KNFQJT8TCU6T-THDyG984te2P0HGQFnAve3WNdbvHNugO-pjjOrlRbdVj9kxKpNVTtkSZNWYybtyKGVAUv76vpnzyRneBG924cxT-e2snmgu7Gjj2U1b1NOyqSOvQYh1mfvP50rgA8y_KC10LxwEHaovo1KU216EqekeoKbGozDgf3H6dGykNg9QQCOoneaZfMtuB2875cgFmWuUeJndQLPuwubZoF-BdGjuXJtHNO-6zS4kLoqICqt68x9pQi5qzW_Am5qoM--Z3I9nMNf6db2VMtbjC1F_96IouxUEySvH3y0Q2TyHEDAjyUjtlsvrUWhO6cdOqZHDBb7D2D_TGnEi84nxYccSmxzsIYOnmSZQRfnkXO5qc1TqDSzHLy7CJLROto077ii11dj2B_jBZzonW_5kQ-Al2OdpCovRLADW0LgGqEBdHMbpYsdOWKypxxIob2C3n7p-8ywN8BBOOYVZ4wgBoaj2dopjcQK1OsAC3Bp0ZW6AyHLu7UTETJaH')
+      .then((response) => response.json())
+      .then((googleResponse) => {
+        captchaResponse = googleResponse.success === true;
+      })
+      .catch(() => {
+        captchaResponse = false;
+      });
+
+    console.log(captchaResponse);
+    console.log(form.serialize());
+
     $.ajax({
       type: form.attr('method'),
       url: form.attr('action'),
