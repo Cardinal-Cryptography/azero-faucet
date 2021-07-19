@@ -402,3 +402,7 @@ footer nav ul li a {
     background-size: 100% 1px;
   }
 }
+
+.g-recaptcha > div {
+  width: 100% !important;
+}
