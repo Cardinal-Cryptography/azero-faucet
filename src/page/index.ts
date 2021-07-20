@@ -61,7 +61,7 @@ app.post('/drip', (req, res) => {
 
          // if hash is null or empty, something went wrong
          if (inner_res.data.hash) {
-           res.status(201).send(`Sent ${address} ${dripAmount} ${unit}s. Extrinsic hash: ${inner_res.data.hash}`);
+           res.status(201).send(`{"message": "Sent ${dripAmount} ${unit}s."}`);
            lastSuccess = attemptTime;
          } else {
            res.status(500).send('An unexpected error occured, please contact us and complain');
