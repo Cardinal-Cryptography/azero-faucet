@@ -39,11 +39,12 @@ $(() => {
 
         setTimeout(() => {
           message.slideUp();
-          window.location.reload();
         }, 5000);
 
         form.find('input[type="text"]:not(.h-form), input[type="email"], input[type="tel"], input[type="url"]').val('');
         form.find('input[type="checkbox"]').prop('checked', false);
+
+        grecaptcha.reset();
       },
       error: (error, ajaxOptions, thrownError) => {
         button.removeAttr('disabled');
@@ -52,6 +53,8 @@ $(() => {
           .html(error.responseText ? error.responseText : thrownError)
           .addClass('is-error')
           .slideDown();
+
+        grecaptcha.reset();
       },
     });
   });
