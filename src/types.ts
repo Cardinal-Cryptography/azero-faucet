@@ -26,7 +26,8 @@ export type EnvNamePage = 'BACKEND_URL'|
  'DRIP_AMOUNT' |
  'PAGE_PORT' |
  'COOLDOWN' |
- 'NETWORK_UNIT'
+ 'NETWORK_UNIT' |
+ 'GOOGLE_CAPTCHA_PRIVATE'
 ;
 
 export interface EnvOpt {

@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import axios from 'axios';
 import dotenv from 'dotenv';
 import express from 'express';
-import Recaptcha from 'recaptcha-verify';
+import { ReCAPTCHA, IVerificationResponse } from "node-grecaptcha-verify";
 import type { BalanceResponse, BotRequestType, DripResponse } from 'src/types';
 
 import { checkEnvVariables, getEnvVariable, logger } from '../utils';
@@ -31,60 +31,52 @@ const ax = axios.create({
 
 let lastSuccess = Date.now();
 
-const recaptcha = new Recaptcha({
-  secret: getEnvVariable('GOOGLE_CAPTCHA_PRIVATE', envVars) as string,
-  verbose: true
-});
+const recaptcha = new ReCAPTCHA(getEnvVariable('GOOGLE_CAPTCHA_PRIVATE', envVars) as string, 0.5);
 
 app.post('/drip', (req, res) => {
   const address = req.body.address;
 
-  let captchaResponse = false;
+  recaptcha.verify(req.body['g-recaptcha-response']).then( function (response) {
+   let isHuman = response.isHuman;
 
-  recaptcha.checkResponse(req.body['g-recaptcha-response'], function (error, response) {
-    if (error)
-      captchaResponse = false;
-    else
-      captchaResponse = !!response.success;
+   if (isHuman) {
+     try {
+       decodeAddress(address);
+     } catch (e) {
+       res.status(400).send('Unparsable address.');
+       return;
+     }
+
+     const attemptTime = Date.now();
+
+     if (attemptTime - cooldown > lastSuccess) {
+       ax.post<DripResponse>('/page-endpoint', {
+         address,
+         amount: dripAmount
+       }).then((inner_res) => {
+         if (inner_res.data.limitReached) {
+           res.status(429).send(`${address} has reached their daily quota. Only request once per day.`);
+           return;
+         }
+
+         // if hash is null or empty, something went wrong
+         if (inner_res.data.hash) {
+           res.status(201).send(`Sent ${address} ${dripAmount} ${unit}s. Extrinsic hash: ${inner_res.data.hash}`);
+           lastSuccess = attemptTime;
+         } else {
+           res.status(500).send('An unexpected error occured, please contact us and complain');
+         }
+       }).catch((e) => {
+         res.status(500).send('An unexpected error occured, please contact us and complain');
+       });
+     } else {
+       res.status(503).send('Too many faucet requests.');
+     }
+   } else {
+     res.status(401).send('Google captcha failed.');
+     return;
+   }
   });
-
-  if (captchaResponse) {
-    try {
-      decodeAddress(address);
-    } catch (e) {
-      res.status(400).send('Unparsable address.');
-      return;
-    }
-
-    const attemptTime = Date.now();
-
-    if (attemptTime - cooldown > lastSuccess) {
-      ax.post<DripResponse>('/page-endpoint', {
-        address,
-        amount: dripAmount
-      }).then((inner_res) => {
-        if (inner_res.data.limitReached) {
-          res.status(429).send(`${address} has reached their daily quota. Only request once per day.`);
-          return;
-        }
-
-        // if hash is null or empty, something went wrong
-        if (inner_res.data.hash) {
-          res.status(201).send(`Sent ${address} ${dripAmount} ${unit}s. Extrinsic hash: ${inner_res.data.hash}`);
-          lastSuccess = attemptTime;
-        } else {
-          res.status(500).send('An unexpected error occured, please contact us and complain');
-        }
-      }).catch((e) => {
-        res.status(500).send('An unexpected error occured, please contact us and complain');
-      });
-    } else {
-      res.status(503).send('Too many faucet requests.');
-    }
-  } else {
-    res.status(401).send('Google captcha failed.');
-    return;
-  }
 });
 
 const main = () => {

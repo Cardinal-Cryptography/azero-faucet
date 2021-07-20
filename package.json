@@ -30,7 +30,7 @@
     "log4js": "^6.3.0",
     "matrix-js-sdk": "^9.5.1",
     "nedb": "^1.8.0",
-    "recaptcha-verify": "^0.1.1"
+    "node-grecaptcha-verify": "^2.0.1"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.0",
