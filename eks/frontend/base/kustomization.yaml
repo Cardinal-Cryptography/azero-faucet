@@ -1,0 +1,5 @@
+commonLabels:
+  app: faucet-frontend
+resources:
+  - deployment.yaml
+  - service.yaml
