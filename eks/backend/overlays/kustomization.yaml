@@ -1,0 +1,18 @@
+namespace: faucet
+commonLabels:
+  namespace: faucet
+patches:
+- path: deployment.yaml
+  target:
+    kind: Deployment
+- path: serviceaccount.yaml
+  target:
+    kind: ServiceAccount
+resources:
+- ../base
+- env-file-sealed-secret.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+images:
+- name: public.ecr.aws/x2t8a1o3/aleph-faucet-backend
+  newTag: latest

@@ -1,0 +1,16 @@
+kind: Deployment
+metadata:
+  name: not-important
+spec:
+  template:
+    metadata:
+      annotations:
+        eks.amazonaws.com/role-arn:  arn:aws:iam::436875894086:role/faucet-testnet-role-eks
+    spec:
+      nodeSelector:
+        env: applications
+      tolerations:
+      - key: "environment"
+        operator: "Equal"
+        value: "applications"
+        effect: "NoSchedule"
