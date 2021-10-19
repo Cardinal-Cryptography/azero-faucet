@@ -1,6 +1,0 @@
-commonLabels:
-  app: faucet-backend
-resources:
-  - deployment.yaml
-  - service.yaml
-  - serviceaccount.yaml
