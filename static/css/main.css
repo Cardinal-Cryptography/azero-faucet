@@ -155,6 +155,21 @@ body img.faucet {
   }
 }
 
+body img.faucet_broken {
+  display: block;
+  width: 100%;
+  max-width: 335px;
+  height: auto;
+  margin: 30px auto 0;
+  padding: 0;
+}
+
+@media screen and (min-width: 768px) {
+  body img.faucet_broken {
+    margin-top: 45px;
+  }
+}
+
 .button--submit {
   display: block;
   position: relative;
