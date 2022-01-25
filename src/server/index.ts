@@ -8,9 +8,9 @@ import { isDripSuccessResponse } from '../guards';
 import type {
   BalanceResponse,
   BotRequestType,
-  PageRequestType,
   DripResponse,
   MetricsDefinition,
+  PageRequestType,
 } from '../types';
 import {
   checkEnvVariables,
@@ -130,31 +130,39 @@ const createAndApplyActions = (): void => {
       });
   });
 
-  app.post<unknown, DripResponse, PageRequestType>('/page-endpoint', (req, res) => {
-    const { address, amount } = req.body;
+  app.post<unknown, DripResponse, PageRequestType>(
+    '/page-endpoint',
+    (req, res) => {
+      const { address, amount } = req.body;
 
-    storage.isValid(address, address).then(async (isAllowed) => {
-      if (!isAllowed) {
-        res.send({ limitReached: true });
-      } else {
-        const hash = await actions.sendTokens(address, amount);
-
-        // hash is null if something wrong happened
-        if (hash) {
-          storage.saveData(address, address)
-            .catch((e) => {
-              logger.error(e);
-              errorCounter.plusOne('other');
+      storage
+        .isValid(address, address)
+        .then(async (isAllowed) => {
+          if (!isAllowed) {
+            res.send({
+              error: `${address} has reached their daily quota. Only request once per day.`,
             });
-        }
+          } else {
+            const sendTokensResult = await actions.sendTokens(address, amount);
 
-        res.send({ hash });
-      }
-    }).catch((e) => {
-      logger.error(e);
-      errorCounter.plusOne('other');
-    });
-  });
+            // hash is null if something wrong happened
+            if (isDripSuccessResponse(sendTokensResult)) {
+              metrics.data.success_requests++;
+              storage.saveData(address, address).catch((e) => {
+                logger.error(e);
+                errorCounter.plusOne('other');
+              });
+            }
+
+            res.send(sendTokensResult);
+          }
+        })
+        .catch((e) => {
+          logger.error(e);
+          errorCounter.plusOne('other');
+        });
+    }
+  );
 
   app.post<unknown, DripResponse, BotRequestType>(
     '/bot-endpoint',
