@@ -10,8 +10,8 @@ RUN npm install --global yarn@1.22.5
 
 WORKDIR /backend
 
+COPY . .
 COPY package.json .
 RUN yarn install
-COPY . .
 
 ENTRYPOINT ["yarn", "backend"]
