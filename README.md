@@ -43,7 +43,7 @@ BACKEND_URL=http://localhost:5555
 DRIP_AMOUNT=150
 ```
 
-Google captch secret key is a public [well-known test key](https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do), 
+Google captcha secret key is a public [well-known test key](https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do), 
 do not use for production purposes!
 
 ## Bot environment variables
