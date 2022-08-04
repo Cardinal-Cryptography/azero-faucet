@@ -95,8 +95,7 @@ export default class Actions {
     try {
       if (!this.account) throw new Error('account not ready');
 
-      const dripAmount = Number(amount) * 10 ** decimals;
-
+      const dripAmount = new BN(amount).mul(new BN(10 ** decimals));
       logger.info('💸 sending tokens');
 
       // start a counter and log a timeout error if we didn't get an answer in time

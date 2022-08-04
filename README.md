@@ -16,31 +16,35 @@ yarn dev:backend
 yarn dev:bot
 ```
 
+To launch faucet frontend
+
+```bash
+yarn page
+```
+
+and then open [http://localhost:5556](http://localhost:5556) in your web browser.
+
 ## Server environment variables
 
 The only common variable between the bot and the server is the NETWORK_DECIMALS.
 Also the server's `PORT` should be part of the bot's `BACKEND_URL`.
 
-Setup a .env file with the following variables
-```bash
+Setup a .env file with the following variables, example
 
-FAUCET_ACCOUNT_MNEMONIC #required - mnemonic seed from faucet account
-FAUCET_BALANCE_CAP # optional - Upper limit cap on whether or not the account can recieve more tokens. Defaults to 100.
-INJECTED_TYPES #optional - if any type must be overriden
-NETWORK_DECIMALS #optional - decimal amount for the network
-PORT #optional - the port you want the server to listen on
-RPC_ENDPOINT #optional - required - ws rpc node endpoint
-```
-
-example:
 ```bash
 FAUCET_ACCOUNT_MNEMONIC="this is a fake mnemonic"
-FAUCET_BALANCE_CAP=100
-INJECTED_TYPES="{ "Address": "AccountId", "LookupSource": "AccountId" }"
 NETWORK_DECIMALS=12
 PORT=5555
-RPC_ENDPOINT="https://westend-rpc.parity.io/"
+RPC_ENDPOINT="http://localhost:9933"
+GOOGLE_CAPTCHA_PRIVATE=6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
+NETWORK_UNIT="DZERO"
+COOLDOWN=100
+BACKEND_URL=http://localhost:5555
+DRIP_AMOUNT=150
 ```
+
+Google captch secret key is a public [well-known test key](https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do), 
+do not use for production purposes!
 
 ## Bot environment variables
 
