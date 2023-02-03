@@ -3,8 +3,8 @@ import axios from 'axios';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import express from 'express';
-import { IVerificationResponse, ReCAPTCHA } from 'node-grecaptcha-verify';
-import type { BalanceResponse, BotRequestType, DripResponse } from 'src/types';
+import { ReCAPTCHA } from 'node-grecaptcha-verify';
+import type { DripResponse } from 'src/types';
 
 import { isDripSuccessResponse } from '../guards';
 import { checkEnvVariables, getEnvVariable, logger } from '../utils';
@@ -74,7 +74,7 @@ app.post('/drip', (req, res) => {
               return;
             }
           })
-          .catch((e) => {
+          .catch(() => {
             res
               .status(500)
               .send(

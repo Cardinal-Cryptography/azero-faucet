@@ -31,13 +31,13 @@ export interface MetricsDefinition {
   data: { [id: string]: number };
 }
 
-export type EnvNamePage = 'BACKEND_URL'|
- 'DRIP_AMOUNT' |
- 'PAGE_PORT' |
- 'COOLDOWN' |
- 'NETWORK_UNIT' |
- 'GOOGLE_CAPTCHA_PRIVATE'
-;
+export type EnvNamePage =
+  | 'BACKEND_URL'
+  | 'DRIP_AMOUNT'
+  | 'PAGE_PORT'
+  | 'COOLDOWN'
+  | 'NETWORK_UNIT'
+  | 'GOOGLE_CAPTCHA_PRIVATE';
 
 export interface EnvOpt {
   default?: PrimitivType;
@@ -71,4 +71,7 @@ export interface PageRequestType {
   amount: string;
 }
 
-export type EnvVar<T extends EnvNameServer | EnvNameBot | EnvNamePage> = Record<T, EnvOpt>;
+export type EnvVar<T extends EnvNameServer | EnvNameBot | EnvNamePage> = Record<
+  T,
+  EnvOpt
+>;
