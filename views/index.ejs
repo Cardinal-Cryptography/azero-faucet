@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <title>Aleph Zero Faucet</title>
-  <meta name="description" content="Get free tokens for the Aleph Zero Devnet.">
+  <meta name="description" content="Get free tokens for the Aleph Zero <%- env %>.">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -59,8 +59,8 @@
 
           <form action="/drip" method="POST" class="js-ajax-form">
             <div class="form-group">
-              <label for="address">Testnet wallet address ($TZERO)</label>
-              <input type="text" name="address" id="address" placeholder="Testnet wallet address ($TZERO)" data-parsley-error-message="You forgot your address!"	 required>
+              <label for="address"><%- env %> wallet address (<%- tokenSymbol %>)</label>
+              <input type="text" name="address" id="address" placeholder="<%- env %> wallet address (<%- tokenSymbol %>)" data-parsley-error-message="You forgot your address!"	 required>
             </div>
 
             <div class="g-recaptcha" data-sitekey="6LfbhPscAAAAAMZpUXhAmHhu1ChB6Xb9Ys7ciOYJ"></div>

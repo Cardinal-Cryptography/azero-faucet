@@ -34,6 +34,7 @@ export interface MetricsDefinition {
 export type EnvNamePage =
   | 'BACKEND_URL'
   | 'DRIP_AMOUNT'
+  | 'ENV'
   | 'PAGE_PORT'
   | 'COOLDOWN'
   | 'NETWORK_UNIT'

@@ -9,6 +9,7 @@ export const envVars: EnvVar<EnvNamePage> = {
   },
   COOLDOWN: { default: 1000, required: false, secret: false, type: 'number' },
   DRIP_AMOUNT: { default: 10, required: false, secret: false, type: 'number' },
+  ENV: { default: 'Devnet', required: false, secret: false, type: 'string' },
   GOOGLE_CAPTCHA_PRIVATE: {
     default: '',
     required: true,

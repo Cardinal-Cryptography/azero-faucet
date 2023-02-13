@@ -15,6 +15,8 @@ dotenv.config();
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.set('view engine', 'ejs');
 app.use(express.static('static'));
 
 checkEnvVariables(envVars);
@@ -25,6 +27,16 @@ const cooldown = getEnvVariable('COOLDOWN', envVars) as number;
 const baseURL = getEnvVariable('BACKEND_URL', envVars) as string;
 const unit = getEnvVariable('NETWORK_UNIT', envVars) as string;
 
+const env = getEnvVariable('ENV', envVars) as string;
+let tokenSymbol = 'DZERO';
+switch (env) {
+  case 'Testnet':
+    tokenSymbol = 'TZERO';
+    break;
+  case 'Mainnet':
+    tokenSymbol = 'AZERO';
+    break;
+}
 const ax = axios.create({
   baseURL,
   timeout: 10000,
@@ -89,6 +101,10 @@ app.post('/drip', (req, res) => {
       return;
     }
   });
+});
+
+app.get('/', (req, res) => {
+  res.render('index', { env, tokenSymbol });
 });
 
 const main = () => {
