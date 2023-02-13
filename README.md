@@ -41,6 +41,7 @@ NETWORK_UNIT="DZERO"
 COOLDOWN=100
 BACKEND_URL=http://localhost:5555
 DRIP_AMOUNT=150
+ENV=Devnet
 ```
 
 Google captcha secret key is a public [well-known test key](https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do), 

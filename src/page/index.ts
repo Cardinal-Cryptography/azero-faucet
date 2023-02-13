@@ -28,15 +28,8 @@ const baseURL = getEnvVariable('BACKEND_URL', envVars) as string;
 const unit = getEnvVariable('NETWORK_UNIT', envVars) as string;
 
 const env = getEnvVariable('ENV', envVars) as string;
-let tokenSymbol = 'DZERO';
-switch (env) {
-  case 'Testnet':
-    tokenSymbol = 'TZERO';
-    break;
-  case 'Mainnet':
-    tokenSymbol = 'AZERO';
-    break;
-}
+const tokenSymbol = getEnvVariable('NETWORK_UNIT', envVars) as string;
+
 const ax = axios.create({
   baseURL,
   timeout: 10000,

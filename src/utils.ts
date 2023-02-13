@@ -31,7 +31,7 @@ export function getEnvVariable<
     } else if (opts.default) {
       returnedEnv = opts.default;
     } else {
-      throw new Error(`No default value set for optionnal variable ${name}`);
+      throw new Error(`No default value set for optional variable ${name}`);
     }
   } else {
     returnedEnv = env;

@@ -12,12 +12,12 @@ export const envVars: EnvVar<EnvNamePage> = {
   ENV: { default: 'Devnet', required: false, secret: false, type: 'string' },
   GOOGLE_CAPTCHA_PRIVATE: {
     default: '',
-    required: true,
+    required: false,
     secret: false,
     type: 'string',
   },
   NETWORK_UNIT: {
-    default: 'UNIT',
+    default: 'DZERO',
     required: false,
     secret: false,
     type: 'string',
