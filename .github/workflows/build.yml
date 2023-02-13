@@ -9,16 +9,15 @@ on:
       - ".github/**"
       - "*.md"
 
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
 jobs:
   deploy-faucet:
     name: Build and push faucet image
     runs-on: ubuntu-latest
     steps:
-      - name: GIT | Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.0
-        with:
-          access_token: ${{ github.token }}
-
       - name: GIT | Checkout Source code
         uses: actions/checkout@v2
 
