@@ -11,7 +11,12 @@ export const envVars: EnvVar<EnvNamePage> = {
   DRIP_AMOUNT: { default: 10, required: false, secret: false, type: 'number' },
   ENV: { default: 'Devnet', required: false, secret: false, type: 'string' },
   GOOGLE_CAPTCHA_PRIVATE: {
-    default: '',
+    required: false,
+    secret: false,
+    type: 'string',
+  },
+  GOOGLE_CAPTCHA_SITE_KEY: {
+    default: '6LfbhPscAAAAAMZpUXhAmHhu1ChB6Xb9Ys7ciOYJ',
     required: false,
     secret: false,
     type: 'string',

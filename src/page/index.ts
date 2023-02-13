@@ -2,7 +2,7 @@ import { decodeAddress } from '@polkadot/keyring';
 import axios from 'axios';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
-import express from 'express';
+import express, { Response } from 'express';
 import { ReCAPTCHA } from 'node-grecaptcha-verify';
 import type { DripResponse } from 'src/types';
 
@@ -37,67 +37,86 @@ const ax = axios.create({
 
 let lastSuccess = Date.now();
 
-const recaptcha = new ReCAPTCHA(
-  getEnvVariable('GOOGLE_CAPTCHA_PRIVATE', envVars) as string,
-  0.5
-);
+const recaptchaSecretKey = getEnvVariable('GOOGLE_CAPTCHA_PRIVATE', envVars);
+const recaptchaSiteKey = getEnvVariable('GOOGLE_CAPTCHA_SITE_KEY', envVars);
 
-app.post('/drip', (req, res) => {
-  const address = req.body.address;
-
-  recaptcha.verify(req.body['g-recaptcha-response']).then(function (response) {
-    const isHuman = response.isHuman;
-
-    if (isHuman) {
-      try {
-        decodeAddress(address);
-      } catch (e) {
-        res.status(400).send('Unparsable address.');
-        return;
-      }
-
-      const attemptTime = Date.now();
-
-      if (attemptTime - cooldown > lastSuccess) {
-        ax.post<DripResponse>('/page-endpoint', {
-          address,
-          amount: dripAmount,
-        })
-          .then((inner_res) => {
-            if (isDripSuccessResponse(inner_res.data)) {
-              res
-                .status(201)
-                .send(`{"message": "Sent ${dripAmount} ${unit}s."}`);
-              lastSuccess = attemptTime;
-            } else {
-              res
-                .status(429)
-                .send(
-                  inner_res.data.error ||
-                    'An unexpected error occured, please contact us and complain'
-                );
-              return;
-            }
-          })
-          .catch(() => {
-            res
-              .status(500)
-              .send(
-                'An unexpected error occured, please contact us and complain'
-              );
-          });
-      } else {
-        res.status(503).send('Too many faucet requests.');
-      }
-    } else {
-      res.status(401).send('Google captcha failed.');
+function sendResponse(
+  isHuman: boolean,
+  address: string | Uint8Array | null | undefined,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  response: Response<any, any>
+) {
+  if (isHuman) {
+    try {
+      decodeAddress(address);
+    } catch (e) {
+      response.status(400).send('Unparsable address.');
       return;
     }
-  });
+
+    const attemptTime = Date.now();
+
+    if (attemptTime - cooldown > lastSuccess) {
+      ax.post<DripResponse>('/page-endpoint', {
+        address,
+        amount: dripAmount,
+      })
+        .then((inner_res) => {
+          if (isDripSuccessResponse(inner_res.data)) {
+            response
+              .status(201)
+              .send(`{"message": "Sent ${dripAmount} ${unit}s."}`);
+            lastSuccess = attemptTime;
+          } else {
+            response
+              .status(429)
+              .send(
+                inner_res.data.error ||
+                  'An unexpected error occurred, please contact us and complain'
+              );
+            return;
+          }
+        })
+        .catch(() => {
+          response
+            .status(500)
+            .send(
+              'An unexpected error occurred, please contact us and complain'
+            );
+        });
+    } else {
+      response.status(503).send('Too many faucet requests.');
+    }
+  } else {
+    response.status(401).send('Google captcha failed.');
+    return;
+  }
+}
+
+app.post('/drip', (req, userResponse) => {
+  const address = req.body.address;
+
+  if (recaptchaSecretKey !== undefined) {
+    console.log(recaptchaSecretKey);
+    const recaptcha = new ReCAPTCHA(recaptchaSecretKey as string, 0.5);
+    recaptcha
+      .verify(req.body['g-recaptcha-response'])
+      .then(function (response) {
+        const isHuman = response.isHuman;
+        sendResponse(isHuman, address, userResponse);
+      });
+  } else {
+    sendResponse(true, address, userResponse);
+  }
 });
 
 app.get('/', (req, res) => {
-  res.render('index', { env, tokenSymbol });
+  res.render('index', {
+    env,
+    hasRecaptcha: recaptchaSecretKey !== undefined,
+    recaptchaSiteKey,
+    tokenSymbol,
+  });
 });
 
 const main = () => {

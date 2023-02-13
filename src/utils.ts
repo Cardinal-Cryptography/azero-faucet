@@ -14,7 +14,7 @@ logger.level = 'debug';
 
 export function getEnvVariable<
   T extends EnvNameBot | EnvNameServer | EnvNamePage
->(name: T, envVars: EnvVar<T>): PrimitivType {
+>(name: T, envVars: EnvVar<T>): PrimitivType | undefined {
   // eslint-disable-next-line security/detect-object-injection
   const env = process.env[name];
   let returnedEnv: PrimitivType;
@@ -31,7 +31,7 @@ export function getEnvVariable<
     } else if (opts.default) {
       returnedEnv = opts.default;
     } else {
-      throw new Error(`No default value set for optional variable ${name}`);
+      return undefined;
     }
   } else {
     returnedEnv = env;
@@ -60,13 +60,9 @@ export function checkEnvVariables<
       if (opt.required) {
         console.error(`✖︎ Required environment variable ${env} not set.`);
       } else {
-        if (!opt.default) {
-          console.error(
-            `✖︎ No default value set for optionnal variable ${env}`
-          );
-        } else {
+        if (opt.default) {
           logger.info(
-            `◉ Optionnal environment variable ${env} not set, using default (${opt.default.toString()}).`
+            `◉ Optional environment variable ${env} not set, using default (${opt.default.toString()}).`
           );
         }
       }

@@ -38,7 +38,8 @@ export type EnvNamePage =
   | 'PAGE_PORT'
   | 'COOLDOWN'
   | 'NETWORK_UNIT'
-  | 'GOOGLE_CAPTCHA_PRIVATE';
+  | 'GOOGLE_CAPTCHA_PRIVATE'
+  | 'GOOGLE_CAPTCHA_SITE_KEY';
 
 export interface EnvOpt {
   default?: PrimitivType;
