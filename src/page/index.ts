@@ -1,5 +1,5 @@
 import { decodeAddress } from '@polkadot/keyring';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import express, { Response } from 'express';
@@ -40,53 +40,69 @@ let lastSuccess = Date.now();
 const recaptchaSecretKey = getEnvVariable('GOOGLE_CAPTCHA_PRIVATE', envVars);
 const recaptchaSiteKey = getEnvVariable('GOOGLE_CAPTCHA_SITE_KEY', envVars);
 
-function sendResponse(
+function validateBackendResponse(
+  inner_res: AxiosResponse<DripResponse>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  response: Response<any, any>,
+  attemptTime: number
+) {
+  if (isDripSuccessResponse(inner_res.data)) {
+    response.status(201).send(`{"message": "Sent ${dripAmount} ${unit}s."}`);
+    lastSuccess = attemptTime;
+  } else {
+    response
+      .status(429)
+      .send(
+        inner_res.data.error ||
+          'An unexpected error occurred, please contact us and complain'
+      );
+  }
+}
+
+function sendResponseWithCooldown(
+  address: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  response: Response<any, any>
+) {
+  const attemptTime = Date.now();
+
+  if (attemptTime - cooldown > lastSuccess) {
+    ax.post<DripResponse>('/page-endpoint', {
+      address,
+      amount: dripAmount,
+    })
+      .then((inner_res) =>
+        validateBackendResponse(inner_res, response, attemptTime)
+      )
+      .catch(() => {
+        response
+          .status(500)
+          .send('An unexpected error occurred, please contact us and complain');
+      });
+  } else {
+    response.status(503).send('Too many faucet requests.');
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function sendResponse(address: string, response: Response<any, any>) {
+  try {
+    decodeAddress(address);
+  } catch (e) {
+    response.status(400).send('Unparsable address.');
+    return;
+  }
+  sendResponseWithCooldown(address, response);
+}
+
+function verifyCaptchaAndSendResponse(
   isHuman: boolean,
-  address: string | Uint8Array | null | undefined,
+  address: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   response: Response<any, any>
 ) {
   if (isHuman) {
-    try {
-      decodeAddress(address);
-    } catch (e) {
-      response.status(400).send('Unparsable address.');
-      return;
-    }
-
-    const attemptTime = Date.now();
-
-    if (attemptTime - cooldown > lastSuccess) {
-      ax.post<DripResponse>('/page-endpoint', {
-        address,
-        amount: dripAmount,
-      })
-        .then((inner_res) => {
-          if (isDripSuccessResponse(inner_res.data)) {
-            response
-              .status(201)
-              .send(`{"message": "Sent ${dripAmount} ${unit}s."}`);
-            lastSuccess = attemptTime;
-          } else {
-            response
-              .status(429)
-              .send(
-                inner_res.data.error ||
-                  'An unexpected error occurred, please contact us and complain'
-              );
-            return;
-          }
-        })
-        .catch(() => {
-          response
-            .status(500)
-            .send(
-              'An unexpected error occurred, please contact us and complain'
-            );
-        });
-    } else {
-      response.status(503).send('Too many faucet requests.');
-    }
+    sendResponse(address, response);
   } else {
     response.status(401).send('Google captcha failed.');
     return;
@@ -94,19 +110,18 @@ function sendResponse(
 }
 
 app.post('/drip', (req, userResponse) => {
-  const address = req.body.address;
+  const address = req.body.address as string;
 
   if (recaptchaSecretKey !== undefined) {
-    console.log(recaptchaSecretKey);
     const recaptcha = new ReCAPTCHA(recaptchaSecretKey as string, 0.5);
     recaptcha
       .verify(req.body['g-recaptcha-response'])
       .then(function (response) {
         const isHuman = response.isHuman;
-        sendResponse(isHuman, address, userResponse);
+        verifyCaptchaAndSendResponse(isHuman, address, userResponse);
       });
   } else {
-    sendResponse(true, address, userResponse);
+    sendResponse(address, userResponse);
   }
 });
 
