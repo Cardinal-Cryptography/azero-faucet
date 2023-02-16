@@ -2,8 +2,8 @@ import log4js from 'log4js';
 
 import type {
   EnvNameBot,
-  EnvNameServer,
   EnvNamePage,
+  EnvNameServer,
   EnvOpt,
   EnvVar,
   PrimitivType,
@@ -12,10 +12,9 @@ import type {
 export const logger = log4js.getLogger();
 logger.level = 'debug';
 
-export function getEnvVariable<T extends EnvNameBot | EnvNameServer | EnvNamePage>(
-  name: T,
-  envVars: EnvVar<T>
-): PrimitivType {
+export function getEnvVariable<
+  T extends EnvNameBot | EnvNameServer | EnvNamePage
+>(name: T, envVars: EnvVar<T>): PrimitivType | undefined {
   // eslint-disable-next-line security/detect-object-injection
   const env = process.env[name];
   let returnedEnv: PrimitivType;
@@ -32,7 +31,7 @@ export function getEnvVariable<T extends EnvNameBot | EnvNameServer | EnvNamePag
     } else if (opts.default) {
       returnedEnv = opts.default;
     } else {
-      throw new Error(`No default value set for optionnal variable ${name}`);
+      return undefined;
     }
   } else {
     returnedEnv = env;
@@ -50,9 +49,9 @@ export function getEnvVariable<T extends EnvNameBot | EnvNameServer | EnvNamePag
   }
 }
 
-export function checkEnvVariables<T extends EnvNameBot | EnvNameServer | EnvNamePage>(
-  envVars: EnvVar<T>
-): void {
+export function checkEnvVariables<
+  T extends EnvNameBot | EnvNameServer | EnvNamePage
+>(envVars: EnvVar<T>): void {
   Object.entries<EnvOpt>(envVars).forEach(([env, opt]) => {
     // eslint-disable-next-line security/detect-object-injection
     const value = process.env[env];
@@ -61,13 +60,9 @@ export function checkEnvVariables<T extends EnvNameBot | EnvNameServer | EnvName
       if (opt.required) {
         console.error(`✖︎ Required environment variable ${env} not set.`);
       } else {
-        if (!opt.default) {
-          console.error(
-            `✖︎ No default value set for optionnal variable ${env}`
-          );
-        } else {
+        if (opt.default) {
           logger.info(
-            `◉ Optionnal environment variable ${env} not set, using default (${opt.default.toString()}).`
+            `◉ Optional environment variable ${env} not set, using default (${opt.default.toString()}).`
           );
         }
       }

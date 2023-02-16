@@ -52,11 +52,13 @@
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.0",
+    "@types/ejs": "^3.1.1",
     "@types/express": "^4.17.11",
     "@types/matrix-js-sdk": "^11.0.1",
     "@types/nedb": "^1.8.11",
     "@typescript-eslint/eslint-plugin": "^4.14.2",
     "@typescript-eslint/parser": "^4.14.2",
+    "ejs": "3.1.8",
     "eslint": "^7.19.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.20.2",
