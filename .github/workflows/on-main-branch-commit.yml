@@ -1,0 +1,55 @@
+---
+name: Push to main commit
+
+on:
+  push:
+    branches:
+      - main
+      # TESTING, remove before merge
+      - A0-3755
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  main:
+    name: Build and push faucet image
+    runs-on: ubuntu-latest
+    steps:
+      - name: GIT | Checkout Source code
+        uses: actions/checkout@v4
+
+      - name: Call action get-ref-properties
+        id: get-ref-properties
+        uses: Cardinal-Cryptography/github-actions/get-ref-properties@v6
+
+      - name: Get facuet rc image name
+        id: get-image-name
+        env:
+          ECR_REGISTRY: '${{ vars.ECR_PUBLIC_REGISTRY }}'
+          APP: faucet
+          TAG: '${{ steps.get-ref-properties.outputs.sha }}'
+        shell: bash
+        run: |
+          image=${{ env.ECR_REGISTRY }}/${{ env.APP }}:${{ env.TAG }}
+          echo "image=${image}" >> $GITHUB_OUTPUT
+
+      - name: Build docker image with PR aleph-node binary
+        run: |
+          docker build \
+            --tag '${{ steps.get-image-name.outputs.image }}' \
+            -f ./docker/Dockerfile .
+
+      - name: Login to ECR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.ECR_PUBLIC_HOST }}
+          username: ${{ secrets.AWS_MAINNET_ACCESS_KEY_ID }}
+          password: ${{ secrets.AWS_MAINNET_SECRET_ACCESS_KEY }}
+
+      - name: Push image to the ECR registry
+        id: push-image
+        run: |
+          docker push '${{ steps.get-image-name.outputs.image }}'
+

@@ -1,0 +1,85 @@
+---
+name: Deploy to Testnet
+
+on:
+  workflow_dispatch:
+  # TESTING, remove before merge
+  push:
+    branches:
+      - A0-3755
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  deploy-faucet:
+    name: Build and push faucet image
+    runs-on: ubuntu-latest
+    steps:
+      - name: GIT | Checkout Source code
+        uses: actions/checkout@v4
+
+      - name: Call action get-ref-properties
+        id: get-ref-properties
+        uses: Cardinal-Cryptography/github-actions/get-ref-properties@v6
+
+      - name: Get facuet rc image name
+        id: get-image-name
+        env:
+          ECR_REGISTRY: '${{ vars.ECR_PUBLIC_REGISTRY }}'
+          APP: faucet
+          TAG: '${{ steps.get-ref-properties.outputs.sha }}'
+        shell: bash
+        run: |
+          image=${{ env.ECR_REGISTRY }}/${{ env.APP }}:${{ env.TAG }}
+          echo "image=${image}" >> $GITHUB_OUTPUT
+
+      - name: Check deploy image existence
+        uses: Cardinal-Cryptography/github-actions/check-image-existence-ecr@v6
+        with:
+          ecr-image: ${{ steps.get-image-name.outputs.image }}
+
+      - name: Get repo owner
+        id: get-repo-owner
+        shell: bash
+        run: |
+          echo "repo-owner=$GITHUB_REPOSITORY_OWNER" >> $GITHUB_OUTPUT
+
+      - name: GIT | Checkout argocd apps repo
+        uses: actions/checkout@v4
+        with:
+          ref: 'testnet'
+          # yamllint disable-line rule:line-length
+          repository: ${{ steps.get-repo-owner.outputs.repo-owner }}/${{ secrets.REPO_ARGOCD_APPS_NAME }}
+          token: ${{ secrets.CI_GH_TOKEN }}
+          path: ${{ secrets.REPO_ARGOCD_APPS_NAME }}
+
+      - name: Init kustomize
+        uses: imranismail/setup-kustomize@v2
+        with:
+          kustomize-version: ${{ vars.KUSTOMIZE_VERSION }}
+
+      - name: Update faucet Testnet image in kustomize file
+        env:
+          RELEASE_IMAGE: ${{ steps.get-image-name.outputs.image }}
+          REGIONS_AWS: 'eu-central-1'
+        run: |
+            export aleph_path=$(pwd)
+            export apps_name=${{ secrets.REPO_ARGOCD_APPS_NAME }}
+            cd ${aleph_path}/${apps_name}/faucet/overlays/testnet/${{ env.REGIONS_AWS }}
+            kustomize edit set image "faucet-image-placeholder=${{ env.RELEASE_IMAGE }}"
+
+
+      - name: GIT | Commit changes to argocd apps repository.
+        uses: EndBug/add-and-commit@v9.1.3
+        with:
+          author_name: ${{ secrets.AUTOCOMMIT_AUTHOR }}
+          author_email: ${{ secrets.AUTOCOMMIT_EMAIL }}
+          # yamllint disable-line rule:line-length
+          message: "Updating testnet faucet docker image tag to: ${{ steps.get-image-name.outputs.image }}"
+          add: "*.yaml"
+          cwd: ${{ secrets.REPO_ARGOCD_APPS_NAME }}
+          branch: testnet
+          # TESTING, remove below line
+          push: false

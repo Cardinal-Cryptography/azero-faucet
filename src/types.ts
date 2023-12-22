@@ -15,15 +15,6 @@ export type EnvNameServer =
   | 'PORT'
   | 'RPC_ENDPOINT';
 
-export type EnvNameBot =
-  | 'BACKEND_URL'
-  | 'DRIP_AMOUNT'
-  | 'MATRIX_ACCESS_TOKEN'
-  | 'MATRIX_BOT_USER_ID'
-  | 'NETWORK_DECIMALS'
-  | 'NETWORK_UNIT'
-  | 'FAUCET_IGNORE_LIST';
-
 export interface MetricsDefinition {
   meta: {
     prefix: string;
@@ -62,18 +53,9 @@ export interface DripSuccessResponse {
 
 export type DripResponse = DripErrorResponse | DripSuccessResponse;
 
-export interface BotRequestType {
-  address: string;
-  amount: string;
-  sender: string;
-}
-
 export interface PageRequestType {
   address: string;
   amount: string;
 }
 
-export type EnvVar<T extends EnvNameServer | EnvNameBot | EnvNamePage> = Record<
-  T,
-  EnvOpt
->;
+export type EnvVar<T extends EnvNameServer | EnvNamePage> = Record<T, EnvOpt>;

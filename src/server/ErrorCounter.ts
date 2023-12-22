@@ -1,10 +1,11 @@
 type CounterType = 'rpcTimeout' | 'other';
 
 class ErrorCounter {
+  // eslint-disable-next-line no-use-before-define
   private static instance: ErrorCounter;
   #counter: Record<CounterType, number>;
 
-  private constructor() {
+  private constructor () {
     this.#counter = { other: 0, rpcTimeout: 0 };
   }
 
@@ -24,7 +25,7 @@ class ErrorCounter {
     }, 0);
   };
 
-  public static getInstance(): ErrorCounter {
+  public static getInstance (): ErrorCounter {
     if (!ErrorCounter.instance) {
       ErrorCounter.instance = new ErrorCounter();
     }

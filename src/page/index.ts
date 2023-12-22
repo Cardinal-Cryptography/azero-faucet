@@ -32,7 +32,7 @@ const tokenSymbol = getEnvVariable('NETWORK_UNIT', envVars) as string;
 
 const ax = axios.create({
   baseURL,
-  timeout: 10000,
+  timeout: 10000
 });
 
 let lastSuccess = Date.now();
@@ -40,7 +40,7 @@ let lastSuccess = Date.now();
 const recaptchaSecretKey = getEnvVariable('GOOGLE_CAPTCHA_PRIVATE', envVars);
 const recaptchaSiteKey = getEnvVariable('GOOGLE_CAPTCHA_SITE_KEY', envVars);
 
-function validateBackendResponse(
+function validateBackendResponse (
   inner_res: AxiosResponse<DripResponse>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   response: Response<any, any>,
@@ -59,7 +59,7 @@ function validateBackendResponse(
   }
 }
 
-function sendResponseWithCooldown(
+function sendResponseWithCooldown (
   address: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   response: Response<any, any>
@@ -69,7 +69,7 @@ function sendResponseWithCooldown(
   if (attemptTime - cooldown > lastSuccess) {
     ax.post<DripResponse>('/page-endpoint', {
       address,
-      amount: dripAmount,
+      amount: dripAmount
     })
       .then((inner_res) =>
         validateBackendResponse(inner_res, response, attemptTime)
@@ -85,7 +85,7 @@ function sendResponseWithCooldown(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function sendResponse(address: string, response: Response<any, any>) {
+function sendResponse (address: string, response: Response<any, any>) {
   try {
     decodeAddress(address);
   } catch (e) {
@@ -95,7 +95,7 @@ function sendResponse(address: string, response: Response<any, any>) {
   sendResponseWithCooldown(address, response);
 }
 
-function verifyCaptchaAndSendResponse(
+function verifyCaptchaAndSendResponse (
   isHuman: boolean,
   address: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -105,20 +105,24 @@ function verifyCaptchaAndSendResponse(
     sendResponse(address, response);
   } else {
     response.status(401).send('Google captcha failed.');
-    return;
   }
 }
 
 app.post('/drip', (req, userResponse) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const address = req.body.address as string;
 
   if (recaptchaSecretKey !== undefined) {
     const recaptcha = new ReCAPTCHA(recaptchaSecretKey as string, 0.5);
     recaptcha
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
       .verify(req.body['g-recaptcha-response'])
       .then(function (response) {
         const isHuman = response.isHuman;
         verifyCaptchaAndSendResponse(isHuman, address, userResponse);
+      })
+      .catch((e) => {
+        logger.error(e);
       });
   } else {
     sendResponse(address, userResponse);
@@ -130,7 +134,7 @@ app.get('/', (req, res) => {
     env,
     hasRecaptcha: recaptchaSecretKey !== undefined,
     recaptchaSiteKey,
-    tokenSymbol,
+    tokenSymbol
   });
 });
 

@@ -6,20 +6,20 @@ export const envVars: EnvVar<EnvNameServer> = {
     default: 100,
     required: false,
     secret: false,
-    type: 'number',
+    type: 'number'
   },
   INJECTED_TYPES: {
     default: '{}',
     required: false,
     secret: false,
-    type: 'string',
+    type: 'string'
   },
   NETWORK_DECIMALS: {
     default: 12,
     required: false,
     secret: false,
-    type: 'number',
+    type: 'number'
   },
   PORT: { default: 5555, required: false, secret: false, type: 'number' },
-  RPC_ENDPOINT: { required: true, secret: false, type: 'string' },
+  RPC_ENDPOINT: { required: true, secret: false, type: 'string' }
 };

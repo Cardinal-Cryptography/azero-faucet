@@ -16,11 +16,11 @@ const now = () => new Date().getTime();
 export default class Storage {
   _db: Datastore;
 
-  constructor(filename = './storage.db', autoload = true) {
+  constructor (filename = './storage.db', autoload = true) {
     this._db = new Datastore({ autoload, filename });
   }
 
-  async close(): Promise<void> {
+  async close (): Promise<void> {
     this._db.persistence.compactDatafile();
 
     return new Promise((resolve) => {
@@ -35,7 +35,7 @@ export default class Storage {
     });
   }
 
-  async isValid(
+  async isValid (
     username: string,
     addr: string,
     limit = 1,
@@ -54,7 +54,7 @@ export default class Storage {
     return false;
   }
 
-  async saveData(username: string, addr: string): Promise<boolean> {
+  async saveData (username: string, addr: string): Promise<boolean> {
     username = sha256(username);
     addr = sha256(addr);
 
@@ -63,7 +63,7 @@ export default class Storage {
     return true;
   }
 
-  async _insert(item: string): Promise<void> {
+  async _insert (item: string): Promise<void> {
     const timestamp = now();
 
     return new Promise((resolve, reject) => {
@@ -74,11 +74,11 @@ export default class Storage {
     });
   }
 
-  async _query(item: string, span: number): Promise<number> {
+  async _query (item: string, span: number): Promise<number> {
     const timestamp = now();
 
     const query = {
-      $and: [{ item }, { timestamp: { $gt: timestamp - span } }],
+      $and: [{ item }, { timestamp: { $gt: timestamp - span } }]
     };
 
     return new Promise((resolve, reject) => {

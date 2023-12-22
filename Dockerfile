@@ -1,17 +1,12 @@
-FROM ubuntu:20.04
+FROM node:20-alpine
 
-RUN apt-get update && apt-get install -y \
-curl software-properties-common
-
-RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
-
-RUN apt-get install -y nodejs && chmod -R 777 /usr/local/bin
-RUN npm install --global yarn@1.22.5
+RUN apk add --update
+RUN apk --no-cache add curl
 
 WORKDIR /faucet
 
 COPY . .
-COPY package.json .
-RUN yarn install
+COPY ./package.json ./yarn.lock ./
+RUN yarn --frozen-lockfile
 
 ENTRYPOINT ["yarn"]
