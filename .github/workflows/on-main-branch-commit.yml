@@ -41,11 +41,9 @@ jobs:
           image=${{ env.ECR_REGISTRY }}${{ env.APP }}:${{ env.TAG }}
           echo "image=${image}" >> $GITHUB_OUTPUT
 
-      - name: Build docker image with PR aleph-node binary
+      - name: Build docker image
         run: |
-          docker build \
-            --tag '${{ steps.get-image-name.outputs.image }}' \
-            -f ./docker/Dockerfile .
+          docker build --tag '${{ steps.get-image-name.outputs.image }}' -f ./Dockerfile .
 
       - name: Login to ECR
         uses: docker/login-action@v3
