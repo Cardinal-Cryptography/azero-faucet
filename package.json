@@ -47,7 +47,6 @@
     "cors": "^2.8.5",
     "express": "4.17.3",
     "log4js": "^6.3.0",
-    "matrix-js-sdk": "^26.1.0",
     "nedb": "^1.8.0",
     "node-grecaptcha-verify": "^2.0.1",
     "pg": "^8.11.2",

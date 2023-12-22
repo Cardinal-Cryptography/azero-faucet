@@ -1,10 +1,10 @@
 ---
-name: Push to main commit
+name: Push to alephzero branch
 
 on:
   push:
     branches:
-      - main
+      - alephzero
 
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
