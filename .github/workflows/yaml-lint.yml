@@ -7,10 +7,6 @@ on:
     paths:
       - '.github/**.yml'
       - '.github/**.yaml'
-  # TESTING, remove before merge
-  push:
-    branches:
-      - A0-3755
 
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
