@@ -55,5 +55,5 @@ jobs:
       - name: Push image to the ECR registry
         id: push-image
         run: |
-          docker push '${{ steps.get-image-name.outputs.image }}'
+          echo docker push '${{ steps.get-image-name.outputs.image }}'
 

@@ -41,10 +41,10 @@ jobs:
           image=${{ env.ECR_REGISTRY }}${{ env.APP }}:${{ env.TAG }}
           echo "image=${image}" >> $GITHUB_OUTPUT
 
-      - name: Check deploy image existence
-        uses: Cardinal-Cryptography/github-actions/check-image-existence-ecr@v6
-        with:
-          ecr-image: ${{ steps.get-image-name.outputs.image }}
+#      - name: Check deploy image existence
+#        uses: Cardinal-Cryptography/github-actions/check-image-existence-ecr@v6
+#        with:
+#          ecr-image: ${{ steps.get-image-name.outputs.image }}
 
       - name: Get repo owner
         id: get-repo-owner
@@ -76,15 +76,14 @@ jobs:
             cd ${aleph_path}/${apps_name}/faucet/overlays/testnet/${{ env.REGIONS_AWS }}
             kustomize edit set image "faucet-image-placeholder=${{ env.RELEASE_IMAGE }}"
 
-
-      - name: GIT | Commit changes to argocd apps repository.
-        uses: EndBug/add-and-commit@v9.1.3
-        with:
-          author_name: ${{ secrets.AUTOCOMMIT_AUTHOR }}
-          author_email: ${{ secrets.AUTOCOMMIT_EMAIL }}
-          # yamllint disable-line rule:line-length
-          message: "Updating testnet faucet docker image tag to: ${{ steps.get-image-name.outputs.image }}"
-          add: "*.yaml"
-          cwd: ${{ secrets.REPO_ARGOCD_APPS_NAME }}
-          # TESTING, remove below line
-          push: false
+#      - name: GIT | Commit changes to argocd apps repository.
+#        uses: EndBug/add-and-commit@v9.1.3
+#        with:
+#          author_name: ${{ secrets.AUTOCOMMIT_AUTHOR }}
+#          author_email: ${{ secrets.AUTOCOMMIT_EMAIL }}
+#          # yamllint disable-line rule:line-length
+#          message: "Updating testnet faucet docker image tag to: ${{ steps.get-image-name.outputs.image }}"
+#          add: "*.yaml"
+#          cwd: ${{ secrets.REPO_ARGOCD_APPS_NAME }}
+#          # TESTING, remove below line
+#          push: false
