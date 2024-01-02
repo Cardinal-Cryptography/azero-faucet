@@ -14,8 +14,8 @@ jobs:
     uses: ./.github/workflows/_check-vars-and-secrets.yml
     secrets: inherit
 
-  deploy-faucet-to-testnet:
-    name: Build and push faucet image
+  deploy-faucet-to-devnet:
+    name: Deploy to Devnet
     needs: [check-vars-and-secrets]
     runs-on: ubuntu-20.04
     steps:
@@ -62,14 +62,14 @@ jobs:
         with:
           kustomize-version: ${{ vars.KUSTOMIZE_VERSION }}
 
-      - name: Update faucet Testnet image in kustomize file
+      - name: Update faucet Devnet image in kustomize file
         env:
           RELEASE_IMAGE: ${{ steps.get-image-name.outputs.image }}
           REGIONS_AWS: 'eu-central-1'
         run: |
             export aleph_path=$(pwd)
             export apps_name=${{ secrets.REPO_ARGOCD_APPS_NAME }}
-            cd ${aleph_path}/${apps_name}/faucet/overlays/testnet/${{ env.REGIONS_AWS }}
+            cd ${aleph_path}/${apps_name}/faucet/overlays/devnet/${{ env.REGIONS_AWS }}
             kustomize edit set image "faucet-image-placeholder=${{ env.RELEASE_IMAGE }}"
 
       - name: GIT | Commit changes to argocd apps repository.

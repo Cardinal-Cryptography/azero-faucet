@@ -15,7 +15,7 @@ jobs:
     secrets: inherit
 
   deploy-faucet-to-testnet:
-    name: Build and push faucet image
+    name: Deploy to Testnet
     needs: [check-vars-and-secrets]
     runs-on: ubuntu-20.04
     steps:
