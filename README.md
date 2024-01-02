@@ -1,5 +1,13 @@
 ## Faucet for aleph-node chain
 
+This repo is a fork of https://github.com/paritytech/polkadot-testnet-faucet, yet it is now its
+own being:
+* it has the same codebase as the upstream repo when it comes to basic functionality (sending tokens),
+although that codebase is pretty old (from 2019)
+* it does not have matrix functionality
+* it has AlephZero own branding
+* It is used only on Devnet and Tesnet environments.
+
 ## Development
 
 Setup dependencies and git hooks
@@ -59,9 +67,3 @@ ENV=Devnet
 
 Google captcha secret key is a public [well-known test key](https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do), 
 do not use for production purposes!
-
-### Misc:
-* Bump API: `yarn upgrade @polkadot/util@latest @polkadot/wasm-crypto@latest @polkadot/keyring@latest @polkadot/x-randomvalues@latest @polkadot/api@latest @polkadot/keyring@latest @polkadot/util-crypto@latest`
-* Server can be queried for Prometheus metrics via http://$BACKEND_URL/metrics
-* Readiness check URL  via http://$BACKEND_URL/ready
-* Health check URL  via http://$BACKEND_URL/health
