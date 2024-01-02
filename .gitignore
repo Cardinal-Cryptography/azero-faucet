@@ -7,5 +7,3 @@ public
 .DS_Store
 .idea
 .env.template
-reset_backend.sh
-restart_frontend.sh

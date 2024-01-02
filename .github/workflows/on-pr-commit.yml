@@ -1,0 +1,22 @@
+---
+name: PR commit
+on:
+  pull_request:
+  merge_group:
+
+jobs:
+  main:
+    continue-on-error: true
+    strategy:
+      matrix:
+        step: ['lint', 'build']
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: ${{ matrix.step }}
+        run: |
+          yarn --frozen-lockfile
+          yarn ${{ matrix.step }}

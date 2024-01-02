@@ -5,7 +5,7 @@ export const envVars: EnvVar<EnvNamePage> = {
     default: 'http://localhost:5555',
     required: false,
     secret: false,
-    type: 'string',
+    type: 'string'
   },
   COOLDOWN: { default: 1000, required: false, secret: false, type: 'number' },
   DRIP_AMOUNT: { default: 10, required: false, secret: false, type: 'number' },
@@ -13,19 +13,19 @@ export const envVars: EnvVar<EnvNamePage> = {
   GOOGLE_CAPTCHA_PRIVATE: {
     required: false,
     secret: true,
-    type: 'string',
+    type: 'string'
   },
   GOOGLE_CAPTCHA_SITE_KEY: {
     default: '6LfbhPscAAAAAMZpUXhAmHhu1ChB6Xb9Ys7ciOYJ',
     required: false,
     secret: false,
-    type: 'string',
+    type: 'string'
   },
   NETWORK_UNIT: {
     default: 'DZERO',
     required: false,
     secret: false,
-    type: 'string',
+    type: 'string'
   },
-  PAGE_PORT: { default: 5556, required: false, secret: false, type: 'number' },
+  PAGE_PORT: { default: 5556, required: false, secret: false, type: 'number' }
 };

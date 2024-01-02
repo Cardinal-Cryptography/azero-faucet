@@ -7,17 +7,11 @@ import * as pkg from '../../package.json';
 import { isDripSuccessResponse } from '../guards';
 import type {
   BalanceResponse,
-  BotRequestType,
   DripResponse,
   MetricsDefinition,
-  PageRequestType,
+  PageRequestType
 } from '../types';
-import {
-  checkEnvVariables,
-  getEnvVariable,
-  isAccountPrivlidged,
-  logger,
-} from '../utils';
+import { checkEnvVariables, getEnvVariable, logger } from '../utils';
 import Actions from './actions';
 import { checkHealth } from './checkHealth';
 import errorCounter from './ErrorCounter';
@@ -33,11 +27,11 @@ const metrics: MetricsDefinition = {
     errors_rpc_timeout: 0,
     errors_total: 0,
     success_requests: 0,
-    total_requests: 0,
+    total_requests: 0
   },
   meta: {
-    prefix: 'faucet',
-  },
+    prefix: 'faucet'
+  }
 };
 
 /**
@@ -50,7 +44,7 @@ const metrics: MetricsDefinition = {
  * @param voidIfUndefined Whether we render it even if null/undefined
  * @returns string
  */
-function getMetrics(
+function getMetrics (
   name: string,
   type: string,
   value: number | string | undefined,
@@ -75,7 +69,9 @@ checkEnvVariables(envVars);
 
 const port = getEnvVariable('PORT', envVars) as number;
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 app.get('/ready', checkHealth);
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 app.get('/health', checkHealth);
 
 // prometheus metrics
@@ -140,7 +136,7 @@ const createAndApplyActions = (): void => {
         .then(async (isAllowed) => {
           if (!isAllowed) {
             res.send({
-              error: `${address} has reached their daily quota. Only request once per day.`,
+              error: `${address} has reached their daily quota. Only request once per day.`
             });
           } else {
             const sendTokensResult = await actions.sendTokens(address, amount);
@@ -149,51 +145,6 @@ const createAndApplyActions = (): void => {
             if (isDripSuccessResponse(sendTokensResult)) {
               metrics.data.success_requests++;
               storage.saveData(address, address).catch((e) => {
-                logger.error(e);
-                errorCounter.plusOne('other');
-              });
-            }
-
-            res.send(sendTokensResult);
-          }
-        })
-        .catch((e) => {
-          logger.error(e);
-          errorCounter.plusOne('other');
-        });
-    }
-  );
-
-  app.post<unknown, DripResponse, BotRequestType>(
-    '/bot-endpoint',
-    (req, res) => {
-      const { address, amount, sender } = req.body;
-      metrics.data.total_requests++;
-
-      storage
-        .isValid(sender, address)
-        .then(async (isAllowed) => {
-          const isPrivileged = isAccountPrivlidged(sender);
-          const isAccountOverBalanceCap = await actions.isAccountOverBalanceCap(
-            address
-          );
-
-          // parity member have unlimited access :)
-          if (!isAllowed && !isPrivileged) {
-            res.send({
-              error: `${sender} has reached their daily quota. Only request once per day.`,
-            });
-          } else if (isAllowed && isAccountOverBalanceCap && !isPrivileged) {
-            res.send({
-              error: `${sender}'s balance is over the faucet's balance cap`,
-            });
-          } else {
-            const sendTokensResult = await actions.sendTokens(address, amount);
-
-            // hash is null if something wrong happened
-            if (isDripSuccessResponse(sendTokensResult)) {
-              metrics.data.success_requests++;
-              storage.saveData(sender, address).catch((e) => {
                 logger.error(e);
                 errorCounter.plusOne('other');
               });

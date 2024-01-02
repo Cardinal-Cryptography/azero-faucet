@@ -1,20 +1,20 @@
 import log4js from 'log4js';
 
 import type {
-  EnvNameBot,
   EnvNamePage,
   EnvNameServer,
   EnvOpt,
   EnvVar,
-  PrimitivType,
+  PrimitivType
 } from './types';
 
 export const logger = log4js.getLogger();
 logger.level = 'debug';
 
-export function getEnvVariable<
-  T extends EnvNameBot | EnvNameServer | EnvNamePage
->(name: T, envVars: EnvVar<T>): PrimitivType | undefined {
+export function getEnvVariable<T extends EnvNameServer | EnvNamePage> (
+  name: T,
+  envVars: EnvVar<T>
+): PrimitivType | undefined {
   // eslint-disable-next-line security/detect-object-injection
   const env = process.env[name];
   let returnedEnv: PrimitivType;
@@ -49,9 +49,9 @@ export function getEnvVariable<
   }
 }
 
-export function checkEnvVariables<
-  T extends EnvNameBot | EnvNameServer | EnvNamePage
->(envVars: EnvVar<T>): void {
+export function checkEnvVariables<T extends EnvNameServer | EnvNamePage> (
+  envVars: EnvVar<T>
+): void {
   Object.entries<EnvOpt>(envVars).forEach(([env, opt]) => {
     // eslint-disable-next-line security/detect-object-injection
     const value = process.env[env];
@@ -75,10 +75,4 @@ export function checkEnvVariables<
     }
   });
   logger.info('------------------------------------------');
-}
-
-export function isAccountPrivlidged(sender: string): boolean {
-  return (
-    sender.endsWith(':matrix.parity.io') || sender.endsWith(':web3.foundation')
-  );
 }
