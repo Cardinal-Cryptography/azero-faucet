@@ -78,6 +78,6 @@ jobs:
           author_name: ${{ secrets.AUTOCOMMIT_AUTHOR }}
           author_email: ${{ secrets.AUTOCOMMIT_EMAIL }}
           # yamllint disable-line rule:line-length
-          message: "Updating testnet faucet docker image tag to: ${{ steps.get-image-name.outputs.image }}"
+          message: "Updating devnet faucet docker image tag to: ${{ steps.get-image-name.outputs.image }}"
           add: "*.yaml"
           cwd: ${{ secrets.REPO_ARGOCD_APPS_NAME }}
