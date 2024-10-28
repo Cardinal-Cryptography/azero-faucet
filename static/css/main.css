@@ -5,17 +5,9 @@
 /** Import fonts */
 
 @font-face {
-  font-family: "Nexa";
+  font-family: 'Gilroy';
   font-weight: 300;
-  src: url(/fonts/38E64A_1_0.eot?a417f7357db298618b95dba01bc21450);
-  src: url(/fonts/38E64A_1_0.eot?a417f7357db298618b95dba01bc21450) format("embedded-opentype"), url(/fonts/38E64A_1_0.woff2?c0b00eb220e8f61ec519a763c7a16017) format("woff2"), url(/fonts/38E64A_1_0.woff?c5634309ec0e01adb1b5d83f711246e8) format("woff"), url(/fonts/38E64A_1_0.ttf?9fb5e9b030187b3fa694cd52614c8003) format("truetype");
-}
-
-@font-face {
-  font-family: "Nexa";
-  font-weight: 900;
-  src: url(/fonts/38E64A_0_0.eot?d3383cef20a3b688e1de1f8ba4144c1a);
-  src: url(/fonts/38E64A_0_0.eot?d3383cef20a3b688e1de1f8ba4144c1a) format("embedded-opentype"), url(/fonts/38E64A_0_0.woff2?47069397c4391b0f0a6292a83d4ee94f) format("woff2"), url(/fonts/38E64A_0_0.woff?9577eb43046e898e5e6347406ebfb275) format("woff"), url(/fonts/38E64A_0_0.ttf?b7597ef3f90bd475cb655b5bd33acc25) format("truetype");
+  src: url('/fonts/gilroy-regular.otf');
 }
 
 a,
@@ -122,7 +114,7 @@ body h1 {
   margin: 0;
   padding: 0;
   color: #fff;
-  font-family: "Nexa", sans-serif;
+  font-family: "Gilroy", sans-serif;
   font-size: 24px;
   font-weight: 300;
   line-height: 1.3;
