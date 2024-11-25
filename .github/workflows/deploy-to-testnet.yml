@@ -84,6 +84,7 @@ jobs:
         with:
           author_name: ${{ secrets.AUTOCOMMIT_AUTHOR }}
           author_email: ${{ secrets.AUTOCOMMIT_EMAIL }}
+          commit: -S
           # yamllint disable-line rule:line-length
           message: "Updating testnet faucet docker image tag to: ${{ steps.get-image-name.outputs.image }}"
           add: "*.yaml"
