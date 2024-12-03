@@ -72,11 +72,21 @@ jobs:
             cd ${aleph_path}/${apps_name}/faucet/overlays/testnet/${{ env.REGIONS_AWS }}
             kustomize edit set image "faucet-image-placeholder=${{ env.RELEASE_IMAGE }}"
 
+      - name: Configure signing key
+        # yamllint disable rule:line-length
+        run: |
+          echo ${{ secrets.AUTOCOMMIT_GPG_KEY_B64 }} | base64 -d > key.gpg
+          gpg --import key.gpg
+          rm key.gpg
+          git config --global user.signingkey $(echo ${{ secrets.AUTOCOMMIT_GPG_KEY_FINGERPRINT }} | tail -c 17)
+        # yamllint enble rule:line-length
+
       - name: GIT | Commit changes to argocd apps repository.
         uses: EndBug/add-and-commit@v9.1.3
         with:
           author_name: ${{ secrets.AUTOCOMMIT_AUTHOR }}
           author_email: ${{ secrets.AUTOCOMMIT_EMAIL }}
+          commit: -S
           # yamllint disable-line rule:line-length
           message: "Updating testnet faucet docker image tag to: ${{ steps.get-image-name.outputs.image }}"
           add: "*.yaml"
